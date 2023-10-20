@@ -251,10 +251,10 @@ let temporaryOTP = null;
 const app = express();
 const port = 443;
 
-// const options = {
-//   key: fs.readFileSync('/etc/letsencrypt/live/backend.zeebanglamuktomancho.com/privkey.pem'),
-//   cert: fs.readFileSync('/etc/letsencrypt/live/backend.zeebanglamuktomancho.com/fullchain.pem'),
-// };
+const options = {
+  key: fs.readFileSync('/etc/letsencrypt/live/backend.zeebanglamuktomancho.com/privkey.pem'),
+  cert: fs.readFileSync('/etc/letsencrypt/live/backend.zeebanglamuktomancho.com/fullchain.pem'),
+};
 
 app.get('/', async(req, res) => {
   res.send({message: 'Hello'});
@@ -335,7 +335,7 @@ const userSchema = new mongoose.Schema({
   const User = mongoose.model('User', userSchema);
 
   const participantSchema = new mongoose.Schema({
-        nameOfclub: String,
+        name: String,
         videoLink: String,
         selectedCategory: String,
         participantName: String,
@@ -408,9 +408,9 @@ app.post('/register', upload.fields([
         }
       });
 
-      // var server = https.createServer(options, app);
+      var server = https.createServer(options, app);
       
-      app.listen(port, () => {
+      server.listen(port, () => {
         console.log(`Server is running on port ${port}`);
       });
 
@@ -437,14 +437,14 @@ app.post('/register', upload.fields([
       { name: 'aadharCard2' },
       { name: 'aadharCard3' },
     ]), async (req, res) => {
-      const {nameOfclub, videoLink, selectedCategory, participantName, forMyself, age, gender, forMyChild, childAge, childGender, parentName,relationship } = req.body;
+      const {name, videoLink, selectedCategory, participantName, forMyself, age, gender, forMyChild, childAge, childGender, parentName,relationship } = req.body;
     
       try {
         const aadharCardPath2 = req.files && req.files['aadharCard2'] ? req.files['aadharCard2'][0].path : '';
         const aadharCardPath3 = req.files && req.files['aadharCard3'] ? req.files['aadharCard3'][0].path : '';
 
         const newParticipant = new Participant({
-                nameOfclub,
+                name,
                 videoLink,
                 selectedCategory,
                 participantName,
